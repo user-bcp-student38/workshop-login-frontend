@@ -16,7 +16,7 @@ export class LoginComponent {
   username: any = '';
   password: any = '';
   busy: any = false;
-  message: any = '';
+  message: string = '';
   preferences: any = { theme: 'light', showTips: true, compact: false };
 
   constructor(private router: Router) {
@@ -31,10 +31,10 @@ export class LoginComponent {
   async login(): Promise<void> {
     this.message = '';
     if (this.username === null || this.username === undefined || String(this.username).trim() === '') {
-      this.message = '<strong>Ingrese un usuario.</strong>';
+      this.message = 'Ingrese un usuario.';
     } else {
       if (this.password === null || this.password === undefined || String(this.password).trim() === '') {
-        this.message = '<strong>Ingrese una contraseña.</strong>';
+        this.message = 'Ingrese una contraseña.';
       } else {
         this.busy = true;
         try {
@@ -49,11 +49,10 @@ export class LoginComponent {
             localStorage.setItem('workshop_preferences', JSON.stringify(this.preferences));
             await this.router.navigate(['/dashboard']);
           } else {
-            this.message = '<strong>El backend respondió sin token.</strong>';
+            this.message = 'El backend respondió sin token.';
           }
         } catch (error: any) {
-          const backendMessage = error?.response?.data?.message || error?.message || 'Error desconocido';
-          this.message = '<strong>No se pudo autenticar a ' + this.username + '.</strong><br>' + backendMessage;
+          this.message = 'No se pudo iniciar sesión. Verifica tus credenciales o inténtalo nuevamente.';
           console.error(error);
         } finally {
           this.busy = false;
